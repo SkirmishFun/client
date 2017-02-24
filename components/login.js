@@ -1,15 +1,13 @@
 const React = require('react')
 const request = require('superagent')
 
+const loginService = require('../services/login')
+
 module.exports = ({state, dispatch}) => {
   console.log({state});
-  function handleSubmit(email, password){
-    request.post('api/v1/users/login')
-    .send({ email, password })
-    .end((err, response) => {
-      if(err) console.log(err)
-      console.log(response)
-    })
+  function handleSubmit(e){
+    e.preventDefault()
+    loginService(state.loginDetails, dispatch)
   }
   const update = (content, field) => dispatch({type: 'UPDATE_LOGIN', payload: {content, field}})
 
@@ -22,7 +20,7 @@ module.exports = ({state, dispatch}) => {
             Password:
             <input onChange={(e) => update(e.target.value, 'password')}type='password' placeholder='Password' />
         </div>
-        <button onClick={() => handleSubmit('email', 'password')} >Login </button>
+        <button onClick={handleSubmit}>Login </button>
       </form>
     </div>
   )

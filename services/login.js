@@ -1,7 +1,8 @@
 import request from 'superagent'
-import url from '../requestUrl'
+import url from '../requestURL'
 
-module.exports = ({{username, password}}, dispatch) => {
+module.exports = (loginDetails, dispatch) => {
+  const {username, password} = loginDetails
   console.log("sending login");
   request
     .post(`${url}users/login`)
@@ -12,6 +13,9 @@ module.exports = ({{username, password}}, dispatch) => {
       if (!err) {
        dispatch({ type: 'LOGIN_SUCCESS', payload: res.body })
       }
-      else dispatch({ type: 'CHANGE_ROUTE', payload: '/' })
+      else {
+        console.log(err);
+        dispatch({ type: 'CHANGE_ROUTE', payload: '/' })
+      }
     })
 }

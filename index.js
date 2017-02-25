@@ -6,6 +6,7 @@ import { createStore } from 'redux'
 
 const Login = require('./components/login')
 const Home = require('./components/home')
+const NewCharacter = require('./components/characters/new')
 const initialState = require('./state')
 
 var reducer = require('./reducer')
@@ -20,7 +21,8 @@ const {getState, dispatch, subscribe} = store
 
 const route = Router({ default: '/404' }, [
   ['/', (params) => Login],
-  ['/home', (params) => Home]
+  ['/home', (params) => Home],
+  ['/characters/new', (params) => NewCharacter]
 ])
 
 subscribe(() => {

@@ -9,7 +9,7 @@ class Login extends React.Component{
     const { dispatch } = this.props
     const username = this.refs.username.value || ' '
     const password = this.refs.password.value || ' '
-    loginService({ username, password }, dispatch);
+    loginService({ username, password }, dispatch)
     e.preventDefault()
   }
 

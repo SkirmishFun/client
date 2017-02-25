@@ -2,9 +2,9 @@ const initialState = require('../state')
 module.exports = function creatingCharacter (state = initialState.creatingCharacter, action) {
   switch (action.type) {
 
-    case 'CHANGE_ARCHTYPE':
+    case 'CHANGE_CREATE':
       return Object.assign({}, state, {
-        archtype: action.payload
+        [action.payload.type]: action.payload.value
       })
 
     default:

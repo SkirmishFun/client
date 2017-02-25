@@ -6,7 +6,7 @@ import { createStore } from 'redux'
 
 const Login = require('./components/login')
 const Home = require('./components/home')
-const NewCharacter = require('./components/characters/new')
+const NewCharacter = require('./components/characters/createNew')
 const initialState = require('./state')
 
 var reducer = require('./reducer')

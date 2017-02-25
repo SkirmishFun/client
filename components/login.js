@@ -3,25 +3,32 @@ const request = require('superagent')
 
 const loginService = require('../services/login')
 
-module.exports = ({state, dispatch}) => {
-  console.log({state});
-  function handleSubmit(e){
-    e.preventDefault()
-    loginService(state.loginDetails, dispatch)
-  }
-  const update = (content, field) => dispatch({type: 'UPDATE_LOGIN', payload: {content, field}})
+class Login extends React.Component{
 
-  return (
-    <div>
-      <form>
-        <div>
+  handleSubmit(e){
+    const { dispatch } = this.props
+    const username = this.refs.username.value || ' '
+    const password = this.refs.password.value || ' '
+    loginService({ username, password }, dispatch)
+    e.preventDefault()
+  }
+
+  render(){
+    return (
+      <div>
+        <form>
+          <div>
             Email:
-            <input onChange={(e) => update(e.target.value, 'username')} type='text' placeholder='Username' />
+            <input type='text' placeholder='Username' ref='username' />
             Password:
-            <input onChange={(e) => update(e.target.value, 'password')}type='password' placeholder='Password' />
-        </div>
-        <button onClick={handleSubmit}>Login </button>
-      </form>
-    </div>
-  )
-}
+            <input type='password' placeholder='Password' ref='password' />
+            <button onClick={this.handleSubmit.bind(this)}>Login </button>
+          </div>
+        </form>
+      </div>
+    )
+  }
+
+  }
+
+module.exports = Login

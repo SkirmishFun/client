@@ -1,8 +1,7 @@
 import request from 'superagent'
 import url from '../requestURL'
 
-module.exports = (loginDetails, dispatch) => {
-  const {username, password} = loginDetails
+module.exports = ({username, password}, dispatch) => {
   console.log("sending login");
   request
     .post(`${url}users/login`)

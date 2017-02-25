@@ -1,11 +1,13 @@
 const React = require('react')
 
+const submitCharacter = require('../../services/character').new
+
 class NewCharacterCreate extends React.Component {
 
   handleSubmit(){
     const { state } = this.props
     const { name, archtype, artifact } = state.creatingCharacter
-    console.log({ name, archtype, artifact })
+    submitCharacter({ name, archtype, artifact })
   }
 
   handleChangeName(){
@@ -17,7 +19,7 @@ class NewCharacterCreate extends React.Component {
   handleChangeArchtype(){
     const { dispatch } = this.props
     const archtype = this.refs.archtype.value
-    dispatch({type: 'CHANGE_CREATE', payload: {type: 'archtype', value: archtype}})
+    dispatch({type: 'CHANGE_CREATE', payload: {type: 'archtype', value: Number(archtype) || null}})
   }
 
   handleChangeArtifact(){
@@ -28,18 +30,18 @@ class NewCharacterCreate extends React.Component {
 
   render(){
     const { state, dispatch } = this.props
-    const artifacts = [
-      {id: 1, archtype: 'rogue', name: 'default rogue'},
-      {id: 2, archtype: 'warrior', name: 'default warrior'},
-      {id: 3, archtype: 'monk', name: 'default monk'},
-      {id: 4, archtype: 'wizard', name: 'default wizard'}
-    ]
+    const { archtypes, artifacts } = state
     function renderArtifacts(artifacts){
       const filteredArtifacts = artifacts.filter(artifact => {
         return state.creatingCharacter.archtype === artifact.archtype
       })
       return filteredArtifacts.map(artifact => {
         return <option key={artifact.id} value={artifact.id}>{artifact.name}</option>
+      })
+    }
+    function renderArchtypes(archtypes){
+      return archtypes.map(archtype => {
+        return <option key={archtype.id} value={archtype.id}>{archtype.name}</option>
       })
     }
     return (
@@ -49,10 +51,7 @@ class NewCharacterCreate extends React.Component {
         </form>
         <select onChange={this.handleChangeArchtype.bind(this)} ref='archtype'>
           <option value={null}>Select Class</option>
-          <option value='warrior'>Warrior</option>
-          <option value='rogue'>Rogue</option>
-          <option value='wizard'>Wizard</option>
-          <option value='monk'>Monk</option>
+          {renderArchtypes(archtypes)}
         </select>
         <select onChange={this.handleChangeArtifact.bind(this)} ref='artifact'>
           <option value={null} >Select artifact</option>

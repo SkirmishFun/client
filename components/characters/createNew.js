@@ -1,13 +1,32 @@
 const React = require('react')
 
 const submitCharacter = require('../../services/character').new
+const getArchetypes = require('../../services/archetypes').getAll
+const getArtifacts = require('../../services/artifacts').getAll
 
 class NewCharacterCreate extends React.Component {
 
+  componentDidMount(){
+    const { state, dispatch } = this.props
+    const { user_id } = state.user
+    getArchetypes((err, res) => {
+      if(err) throw err
+      dispatch({type: 'UPDATE_ARCHETYPES', payload: res.body})
+    })
+    getArtifacts(user_id, (err, res) => {
+      if(err) throw err
+      console.log(res)
+    })
+  }
+
   handleSubmit(){
     const { state } = this.props
-    const { name, archtype, artifact } = state.creatingCharacter
-    submitCharacter({ name, archtype, artifact })
+    const { user_id } = state.user
+    const { name, archetype, artifact } = state.creatingCharacter
+    submitCharacter({ name, archetype, artifact }, user_id, (err, res) => {
+      if(err) throw err
+      console.log(res)
+    })
   }
 
   handleChangeName(){
@@ -16,10 +35,10 @@ class NewCharacterCreate extends React.Component {
     dispatch({type: 'CHANGE_CREATE', payload: {type: 'name', value: name}})
   }
 
-  handleChangeArchtype(){
+  handleChangeArchetype(){
     const { dispatch } = this.props
-    const archtype = this.refs.archtype.value
-    dispatch({type: 'CHANGE_CREATE', payload: {type: 'archtype', value: Number(archtype) || null}})
+    const archetype = this.refs.archetype.value
+    dispatch({type: 'CHANGE_CREATE', payload: {type: 'archetype', value: Number(archetype) || null}})
   }
 
   handleChangeArtifact(){
@@ -30,18 +49,19 @@ class NewCharacterCreate extends React.Component {
 
   render(){
     const { state, dispatch } = this.props
-    const { archtypes, artifacts } = state
+    const { archetypes, artifacts } = state
     function renderArtifacts(artifacts){
       const filteredArtifacts = artifacts.filter(artifact => {
-        return state.creatingCharacter.archtype === artifact.archtype
+        return state.creatingCharacter.archetype === artifact.archetype
       })
       return filteredArtifacts.map(artifact => {
         return <option key={artifact.id} value={artifact.id}>{artifact.name}</option>
       })
     }
-    function renderArchtypes(archtypes){
-      return archtypes.map(archtype => {
-        return <option key={archtype.id} value={archtype.id}>{archtype.name}</option>
+    function renderArchetypes(archetypes){
+      return archetypes.map(archetype => {
+        const { archetype_id, archetype_name } = archetype
+        return <option key={archetype_id} value={archetype_id}>{archetype_name}</option>
       })
     }
     return (
@@ -49,9 +69,9 @@ class NewCharacterCreate extends React.Component {
         <form>
           <input onChange={this.handleChangeName.bind(this)} type='text' placeholder='Charcter Name' ref='name' />
         </form>
-        <select onChange={this.handleChangeArchtype.bind(this)} ref='archtype'>
+        <select onChange={this.handleChangeArchetype.bind(this)} ref='archetype'>
           <option value={null}>Select Class</option>
-          {renderArchtypes(archtypes)}
+          {renderArchetypes(archetypes)}
         </select>
         <select onChange={this.handleChangeArtifact.bind(this)} ref='artifact'>
           <option value={null} >Select artifact</option>

@@ -3,9 +3,9 @@ const React = require('react')
 class NewCharacterCreate extends React.Component {
 
   handleSubmit(){
-    const charName = this.refs.charName.value
-    const archtype = this.refs.archtype.value
-    console.log({ charName, archtype })
+    const { state } = this.props
+    const { name, archtype, artifact } = state.creatingCharacter
+    console.log({ name, archtype, artifact })
   }
 
   handleChangeName(){
@@ -55,7 +55,7 @@ class NewCharacterCreate extends React.Component {
           <option value='monk'>Monk</option>
         </select>
         <select onChange={this.handleChangeArtifact.bind(this)} ref='artifact'>
-          <option value='default'>Select artifact</option>
+          <option value={null} >Select artifact</option>
           {renderArtifacts(artifacts)}
         </select><br />
         <button onClick={this.handleSubmit.bind(this)}>Create</button>

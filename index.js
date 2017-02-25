@@ -26,7 +26,7 @@ const route = Router({ default: '/404' }, [
 ])
 
 subscribe(() => {
-  console.log(getState().route);
+  console.log(getState());
   const Component = route(getState().route)
   render(<Component state={getState()} dispatch={dispatch} />, app)
 })

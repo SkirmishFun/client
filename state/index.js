@@ -1,4 +1,9 @@
 module.exports = {
   route: '/',
-  user: {}
+  user: {},
+  creatingCharacter: {
+    name: null,
+    archtype: null,
+    artifact: null,
+  }
 }
